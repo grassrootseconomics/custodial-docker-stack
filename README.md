@@ -15,7 +15,7 @@ Run the entire GE custodial stack with Docker on a local devnet with minimal eff
 
 ### Setup
 
-In the correct dependency order:
+In the correct dependency order (run the docker compose commands in the respecctive folders in the order given above):
 
 1. Create a `custodial` overlay network with `docker network create custodial`.
 2. Pull the images with `docker-compose pull`.
