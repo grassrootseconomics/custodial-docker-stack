@@ -1,0 +1,44 @@
+services:    
+  eth-tracker:
+    image: ghcr.io/grassrootseconomics/eth-tracker:v1.2.2-rc
+    restart: unless-stopped
+    env_file:
+      - stack.env
+    volumes:
+      - custodial-tracker-data:/service/db
+    ports:
+      - 127.0.0.1:5001:5001
+    networks:
+      - custodial
+  eth-indexer:
+    image: ghcr.io/grassrootseconomics/eth-indexer:v1.4.2-beta
+    restart: unless-stopped
+    depends_on:
+          eth-tracker:
+            condition: service_started    
+    env_file:
+      - stack.env
+    ports:
+      - 127.0.0.1:5002:5002
+    networks:
+      - custodial
+  eth-custodial:
+    image: ghcr.io/grassrootseconomics/eth-custodial:v1.0.4-beta
+    restart: unless-stopped
+    depends_on:
+      eth-tracker:
+        condition: service_started
+    env_file:
+      - stack.env
+    ports:
+      - 127.0.0.1:5003:5003
+    networks:
+      - custodial      
+
+volumes:
+  custodial-tracker-data:
+    driver: local
+
+networks:
+  custodial:
+    external: true  

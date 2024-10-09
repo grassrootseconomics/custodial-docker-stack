@@ -1,0 +1,80 @@
+services:
+  reth:
+    image: ghcr.io/paradigmxyz/reth:v1.0.8
+    restart: unless-stopped
+    command: |
+      node
+      --datadir /root/devnet-chaindata
+      --dev --dev.block-time 1s
+      --http
+      --http.addr 0.0.0.0
+      --ws --ws.addr 0.0.0.0
+      -vvv
+    ports:
+      - 127.0.0.1:8545:8545
+      - 127.0.0.1:8546:8546
+    volumes:
+      - custodial-reth-data:/root/devnet-chaindata
+    networks:
+      - custodial    
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    user: postgres
+    env_file:
+      - services.env
+    volumes:
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - custodial-postgres-data:/var/lib/postgresql/data
+    ports:
+      - 127.0.0.1:5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - custodial
+  nats:
+    image: nats:2
+    restart: unless-stopped
+    command: |
+      -js
+      -sd /nats/data
+      -m 8222
+    volumes:
+      - custodial-nats-data:/nats/data
+    ports:
+      - 127.0.0.1:4222:4222
+      - 127.0.0.1:8222:8222
+    networks:
+      - custodial
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - custodial-redis-data:/data
+    ports:
+      - 127.0.0.1:6379:6379
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - custodial       
+
+volumes:
+  custodial-reth-data:
+    driver: local
+  custodial-postgres-data:
+    driver: local
+  custodial-nats-data:
+    driver: local
+  custodial-redis-data:
+    driver: local
+
+networks:
+  custodial:
+    external: true  
