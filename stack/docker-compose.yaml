@@ -23,7 +23,7 @@ services:
     networks:
       - custodial
   eth-custodial:
-    image: ghcr.io/grassrootseconomics/eth-custodial:v1.1.0-beta
+    image: ghcr.io/grassrootseconomics/eth-custodial:v1.1.1-beta
     restart: unless-stopped
     depends_on:
       eth-tracker:
