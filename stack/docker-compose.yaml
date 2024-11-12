@@ -11,7 +11,7 @@ services:
     networks:
       - custodial
   eth-indexer:
-    image: ghcr.io/grassrootseconomics/eth-indexer:v2.0.0-rc
+    image: ghcr.io/grassrootseconomics/eth-indexer:v2.0.1-rc
     restart: unless-stopped
     depends_on:
           eth-tracker:
