@@ -45,7 +45,22 @@ services:
     ports:
       - 127.0.0.1:5006:5006
     networks:
-      - custodial          
+      - custodial
+  ussd:
+    image: ghcr.io/grassrootseconomics/urdt-ussd:latest
+    restart: unless-stopped
+    depends_on:
+      eth-indexer:
+        condition: service_started
+      eth-custodial:
+          condition: service_started        
+    env_file:
+      - ussd.env
+    command: ./ussd-africastalking -db postgres -d true
+    ports:
+      - 127.0.0.1:7123:7123
+    networks:
+      - custodial         
 
 volumes:
   custodial-tracker-data:
