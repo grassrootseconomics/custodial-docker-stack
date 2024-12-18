@@ -1,6 +1,6 @@
 services:
   reth:
-    image: ghcr.io/paradigmxyz/reth:v1.0.8
+    image: ghcr.io/paradigmxyz/reth:v1.1.4
     restart: unless-stopped
     command: |
       node

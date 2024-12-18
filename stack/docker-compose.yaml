@@ -1,6 +1,6 @@
 services:    
   eth-tracker:
-    image: ghcr.io/grassrootseconomics/eth-tracker:v1.2.2-rc
+    image: ghcr.io/grassrootseconomics/eth-tracker:v1.4.6-rc
     restart: unless-stopped
     env_file:
       - stack.env
@@ -11,7 +11,7 @@ services:
     networks:
       - custodial
   eth-indexer:
-    image: ghcr.io/grassrootseconomics/eth-indexer:v1.4.2-beta
+    image: ghcr.io/grassrootseconomics/eth-indexer:v2.1.1-rc
     restart: unless-stopped
     depends_on:
           eth-tracker:
@@ -23,7 +23,7 @@ services:
     networks:
       - custodial
   eth-custodial:
-    image: ghcr.io/grassrootseconomics/eth-custodial:v1.1.1-beta
+    image: ghcr.io/grassrootseconomics/eth-custodial:v1.4.4-beta
     restart: unless-stopped
     depends_on:
       eth-tracker:
@@ -32,6 +32,18 @@ services:
       - stack.env
     ports:
       - 127.0.0.1:5003:5003
+    networks:
+      - custodial
+  ussd-data-service:
+    image: ghcr.io/grassrootseconomics/ussd-data-service:v1.2.0-beta
+    restart: unless-stopped
+    depends_on:
+      eth-indexer:
+        condition: service_started
+    env_file:
+      - stack.env
+    ports:
+      - 127.0.0.1:5006:5006
     networks:
       - custodial      
 
