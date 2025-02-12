@@ -1,2 +1,2 @@
-CREATE DATABASE ge_celo_custodial;
-CREATE DATABASE ge_celo_data;
+CREATE DATABASE eth_custodial;
+CREATE DATABASE chain_data;
