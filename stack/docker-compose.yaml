@@ -21,7 +21,32 @@ services:
     ports:
       - 127.0.0.1:5002:5002
     networks:
-      - custodial  
+      - custodial
+  ussd-data-service:
+    image: ghcr.io/grassrootseconomics/ussd-data-service:v1.4.0-beta
+    restart: unless-stopped
+    depends_on:
+      eth-indexer:
+        condition: service_started
+    env_file:
+      - stack.env
+    ports:
+      - 127.0.0.1:5006:5006
+    networks:
+      - custodial
+  eth-custodial-notify:
+    image: ghcr.io/grassrootseconomics/eth-custodial-notify:v1.0.0-beta
+    restart: unless-stopped
+    depends_on:
+      eth-indexer:
+        condition: service_started
+    env_file:
+      - stack.env
+    ports:
+      - 127.0.0.1:5035:5035
+    networks:
+      - custodial
+
 
 volumes:
   custodial-tracker-data:
