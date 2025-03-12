@@ -46,6 +46,19 @@ services:
       - 127.0.0.1:5035:5035
     networks:
       - custodial
+  eth-custodial:
+    image: ghcr.io/grassrootseconomics/eth-custodial:v1.5.0-beta
+    restart: unless-stopped
+    depends_on:
+      eth-tracker:
+        condition: service_started
+    env_file:
+      - stack.env
+    ports:
+      - 127.0.0.1:5003:5003
+    networks:
+      - custodial
+
 
 
 volumes:
