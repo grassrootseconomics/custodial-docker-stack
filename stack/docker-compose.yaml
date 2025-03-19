@@ -1,6 +1,6 @@
 services:    
   eth-tracker:
-    image: kamikazechaser/eth-tracker:celo-old-2
+    image: ghcr.io/grassrootseconomics/eth-tracker:v1.6.0-celo-prefork-rc
     restart: unless-stopped
     env_file:
       - stack.env
@@ -11,7 +11,7 @@ services:
     networks:
       - custodial
   eth-indexer:
-    image: ghcr.io/grassrootseconomics/eth-indexer:v2.3.0-stable
+    image: ghcr.io/grassrootseconomics/eth-indexer:v2.4.1-stable
     restart: unless-stopped
     depends_on:
           eth-tracker:
